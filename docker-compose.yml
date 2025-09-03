@@ -1,0 +1,42 @@
+x-common: &common-vars
+  build: .
+  volumes:
+    - ./app/hello-pyspark.py:/opt/bitnami/spark/app/hello-pyspark.py
+
+x-common-env: &common-env-vars
+  SPARK_USER: sparkuser
+  SPARK_DAEMON_USER: sparkuser
+  SPARK_DAEMON_GROUP: sparkuser
+  SPARK_SSL_ENABLED: "no"
+  SPARK_RPC_AUTHENTICATION_ENABLED: "no"
+  SPARK_RPC_ENCRYPTION_ENABLED: "no"
+  SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED: "no"
+  SPARK_MASTER_URL: spark://spark:7077
+
+x-master-env: &master-env
+  <<: *common-env-vars
+  SPARK_MODE: master
+  SPARK_MASTER_HOST: spark
+  SPARK_MASTER_PORT: 7077
+  SPARK_MASTER_WEBUI_PORT: 8080
+
+x-worker-env: &worker-env
+  <<: *common-env-vars
+  SPARK_MODE: worker
+  SPARK_WORKER_MEMORY: 1G
+  SPARK_WORKER_CORES: 1
+
+services:
+  spark:
+    container_name: spark-master
+    <<: *common-vars
+    environment:
+      <<: *master-env
+    ports:
+      - "127.0.0.1:8080:8080"  # Master Web UI
+      - "7077:7077"  # Master Port for Workers
+
+  spark-worker:
+    <<: *common-vars
+    environment:
+      <<: *worker-env
