@@ -1,7 +1,7 @@
 x-common: &common-vars
   build: .
   volumes:
-    - ./app/hello-pyspark.py:/opt/bitnami/spark/app/hello-pyspark.py
+    - ./app:/app
 
 x-common-env: &common-env-vars
   SPARK_USER: sparkuser
@@ -44,6 +44,8 @@ services:
       <<: *worker-env
     networks:
       spark-net: {}  # worker IPs are dynamic
+    depends_on:
+      - spark
 
 networks:
   spark-net:

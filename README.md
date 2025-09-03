@@ -7,7 +7,7 @@
 ## Prerequisites
 - Python 3.12 or higher
 - Docker and Docker Compose installed on your machine
-- uv installed on your machine (optional, used for Python dependency management)
+- uv is installed on your machine (optional, used for Python dependency management)
 - pyspark package installed on your machine, version 3.5.6 (use exactly this version)
 
 Comments:
@@ -79,13 +79,13 @@ or you can also start a Spark cluster with multiple worker nodes:
 Now we can demonstrate how to run the PySpark application that connects to a remote Spark cluster:
 
 ```
-export SPARK_MASTER_URL=spark://spark-master:7077 SPARK_LOCAL_IP=172.25.0.1
+export SPARK_MASTER_URL=spark://172.25.0.10:7077 SPARK_LOCAL_IP=172.25.0.1
 python app/hello-pyspark.py
 ```
 
 Environment variables:
 - `SPARK_MASTER_URL` - the URL of the Spark Master node
-- `SPARK_LOCAL_IP` - the IP address of the local machine (driver) you are running the code from
+- `SPARK_LOCAL_IP` - the IP address of the local machine (driver) you are running the code from, it should be in the same subnet as the Docker network.
 
 We are running the code from the local machine. Our local machine serves as a driver in the Spark cluster.
 1) In order to run our code we need to provide SPARK_MASTER_URL environment variable. This variable will
